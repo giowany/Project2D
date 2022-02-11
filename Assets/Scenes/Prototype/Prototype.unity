@@ -1060,13 +1060,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRigidBody: {fileID: 1385882055}
+  imageplayer: {fileID: 0}
   speed: 12
   speedRun: 19
   jumpForce: 15
   friction: {x: 0.05, y: 0}
-  jumpScaleY: 1.5
+  jumpScaleY: 1.4
   jumpScaleX: 0.7
-  durationAnimation: 0.25
+  durationAnimation: 0.2
+  fallScaleX: 1.2
+  fallScaleY: 0.8
+  durationAnimFall: 0.15
   ease: 27
 --- !u!1 &1442729567
 GameObject:
