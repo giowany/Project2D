@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
         {
             animatorPlayer.SetBool(runBool, false);
             animatorPlayer.speed = speedWalkAnim;
+            playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
         }
 
         if(playerRigidBody.velocity.x < 0)
@@ -111,8 +112,8 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         _jumping = false;
-        var colision = collision.GetContact(0).normal;
-        if (colision == new Vector2(0, 1))
+        var c = collision.GetContact(0).normal;
+        if (c == new Vector2(0, 1))
         {
             grounded = false;
             if (!_Anim)
