@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float speedRun;
     public float jumpForce;
+    public bool grounded;
     public Vector2 friction = new Vector2(.1f, 0);
 
     [Header("Animations Setup")]
@@ -110,26 +111,35 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         _jumping = false;
-
-        if (!_Anim)
+        var colision = collision.GetContact(0).normal;
+        if (colision == new Vector2(0, 1))
         {
-            animatorPlayer.SetBool(landingBool, true);
-            animatorPlayer.SetBool(jumpBool, false);
-            if (playerRigidBody.transform.localScale.x > 0) playerRigidBody.transform.localScale = Vector2.one;
-            else if (playerRigidBody.transform.localScale.x < 0) playerRigidBody.transform.localScale = new Vector2(-1, 1);
-            DOTween.Kill(playerRigidBody.transform);
-            if (playerRigidBody.transform.localScale.x > 0)
+            grounded = false;
+            if (!_Anim)
             {
-                playerRigidBody.transform.DOScaleX(fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-                playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+                animatorPlayer.SetTrigger(landingBool);
+                animatorPlayer.SetBool(jumpBool, false);
+                if (playerRigidBody.transform.localScale.x > 0) playerRigidBody.transform.localScale = Vector2.one;
+                else if (playerRigidBody.transform.localScale.x < 0) playerRigidBody.transform.localScale = new Vector2(-1, 1);
+                DOTween.Kill(playerRigidBody.transform);
+                if (playerRigidBody.transform.localScale.x > 0)
+                {
+                    playerRigidBody.transform.DOScaleX(fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+                    playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
 
+                }
+                else if (playerRigidBody.transform.localScale.x < 0)
+                {
+                    playerRigidBody.transform.DOScaleX(-fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+                    playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+                }
+                _Anim = true;
             }
-            else if (playerRigidBody.transform.localScale.x < 0)
-            {
-                playerRigidBody.transform.DOScaleX(-fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-                playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-            }
-            _Anim = true;
+
+        }
+        else
+        {
+            grounded = true;
         }
     }
 
@@ -141,8 +151,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (grounded) return;
+
+        grounded = false;
         _jumping = true;
-        animatorPlayer.SetBool(landingBool, false);
+        
     }
 
     void Update()
