@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float speedRun;
     public float jumpForce;
-    public bool grounded;
     public Vector2 friction = new Vector2(.1f, 0);
 
     [Header("Animations Setup")]
@@ -23,22 +22,24 @@ public class PlayerController : MonoBehaviour
     public float speedRunAnim = 1.5f;
     public float swapDuration = .3f;
     public string jumpBool = "Jump";
-    public string landingBool = "Landing";
+    public string landingTrigger = "Landing";
+    public string fallBool = "Fall";
 
 
-    [Header("Animation Jump Setup")]
+    [Header("DOAnimation Jump Setup")]
     public float jumpScaleY = 1.5f;
     public float jumpScaleX = .7f;
     public float durationAnimation = 1f;
 
-    [Header("Animation fall Setup")]
+    [Header("DOAnimation fall Setup")]
     public float fallScaleX = 1.2f;
     public float fallScaleY = .7f;
     public float durationAnimFall = 1f;
     public Ease ease = Ease.OutBack;
 
-    private bool _jumping = false;
+    [SerializeField]private bool _jumping = false;
     private bool _Anim = false;
+    private bool _grounded;
 
     private void HandleMoviment()
     {
@@ -80,7 +81,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_jumping) return;
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && _grounded)
         {
             playerRigidBody.velocity = Vector2.up * jumpForce;
             if (playerRigidBody.transform.localScale.x > 0) playerRigidBody.transform.localScale = Vector2.one;
@@ -89,6 +90,7 @@ public class PlayerController : MonoBehaviour
             HandleAnimationJump();
             animatorPlayer.SetBool(jumpBool, true);
             _jumping = true;
+            _grounded = false;
         }
     }
 
@@ -111,15 +113,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        _jumping = false;
         var c = collision.GetContact(0).normal;
         if (c == new Vector2(0, 1))
         {
-            grounded = false;
+            _grounded = true;
             if (!_Anim)
             {
-                animatorPlayer.SetTrigger(landingBool);
+                _Anim = true;
+                _jumping = false;
+                animatorPlayer.SetBool(fallBool, false);
+                animatorPlayer.SetTrigger(landingTrigger);
                 animatorPlayer.SetBool(jumpBool, false);
+                // condicional para animaçao DOTween
                 if (playerRigidBody.transform.localScale.x > 0) playerRigidBody.transform.localScale = Vector2.one;
                 else if (playerRigidBody.transform.localScale.x < 0) playerRigidBody.transform.localScale = new Vector2(-1, 1);
                 DOTween.Kill(playerRigidBody.transform);
@@ -134,13 +139,21 @@ public class PlayerController : MonoBehaviour
                     playerRigidBody.transform.DOScaleX(-fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
                     playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
                 }
-                _Anim = true;
             }
 
         }
         else
         {
-            grounded = true;
+            _jumping = false;
+        }
+    }
+
+    private void Fall()
+    {
+        if (animatorPlayer.GetBool(fallBool))
+        {
+            _jumping = true;
+            _Anim = false;
         }
     }
 
@@ -152,9 +165,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (grounded) return;
+        if (playerRigidBody.velocity.y < 0)
+        {
+            animatorPlayer.SetBool(fallBool, true);
+            _grounded = false;
+        }
 
-        grounded = false;
+        if (_grounded) return;
+
         _jumping = true;
         
     }
@@ -163,6 +181,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleJump();
         HandleMoviment();
+        Fall();
     }
     private void OnValidate()
     {
@@ -171,6 +190,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        
+        Init();
     }
 }
