@@ -5,16 +5,16 @@ using EBAC.Core.Singleton;
 
 public class ItemManager : Singleton<ItemManager> 
 {
-    [SerializeField] private int coins;
+    [SerializeField] private int _coins;
 
     public void AddCoins(int amount = 1)
     {
-        coins += amount;
+        _coins += amount;
     }
 
     private void ResetItens()
     {
-        coins = 0;
+        _coins = 0;
     }
 
     private void Start()

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5716728445546092767}
   - component: {fileID: 5716728445546092755}
   - component: {fileID: 5716728445546092756}
-  - component: {fileID: 4238609464671371165}
+  - component: {fileID: 1414752502}
   m_Layer: 0
   m_Name: PFB_Player
   m_TagString: Player
@@ -70,17 +70,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRigidBody: {fileID: 5716728445546092767}
   animatorPlayer: {fileID: 1705311891786301503}
-  speed: 12
-  speedRun: 19
+  speed: 17
+  speedRun: 23
   jumpForce: 19
-  grounded: 0
   friction: {x: 0.3, y: 0}
   runBool: Run
   speedWalkAnim: 1
   speedRunAnim: 1.3
   swapDuration: 0.3
   jumpBool: Jump
-  landingBool: Landing 0
+  landingTrigger: Landing
+  fallBool: Fall
   jumpScaleY: 1.2
   jumpScaleX: 0.7
   durationAnimation: 0.2
@@ -88,6 +88,7 @@ MonoBehaviour:
   fallScaleY: 0.8
   durationAnimFall: 0.15
   ease: 27
+  _jumping: 0
 --- !u!114 &5716728445546092756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,8 +106,8 @@ MonoBehaviour:
   timeToDie: 1
   healthFloat: Health
   deadBool: Dead
---- !u!61 &4238609464671371165
-BoxCollider2D:
+--- !u!70 &1414752502
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -118,19 +119,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0.020004272, y: 2.7513347}
+  m_Size: {x: 3.1470337, y: 5.4876356}
+  m_Direction: 0
 --- !u!1001 &5716728445800511712
 PrefabInstance:
   m_ObjectHideFlags: 0
