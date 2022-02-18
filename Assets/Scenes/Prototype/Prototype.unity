@@ -2378,6 +2378,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5716728445546092755, guid: 1c70e7de95798f942a9aa2c7c5be2c17, type: 3}
+      propertyPath: speed
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716728445546092755, guid: 1c70e7de95798f942a9aa2c7c5be2c17, type: 3}
+      propertyPath: speedRun
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 5716728445546092766, guid: 1c70e7de95798f942a9aa2c7c5be2c17, type: 3}
       propertyPath: m_Name
       value: PFB_Player
