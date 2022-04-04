@@ -2172,6 +2172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1996371859}
+  - component: {fileID: 1996371860}
   m_Layer: 0
   m_Name: Coins
   m_TagString: Untagged
@@ -2202,6 +2203,19 @@ Transform:
   m_Father: {fileID: 1166800380}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1996371860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996371858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4457f450a4af0a34394a2842477146b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagPlayer: Player
 --- !u!4 &2032797095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2465997302617805831, guid: 97a1fe6576c24fb449e053eb7839c102, type: 3}
