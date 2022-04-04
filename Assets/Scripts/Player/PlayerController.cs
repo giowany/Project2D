@@ -37,34 +37,45 @@ public class PlayerController : MonoBehaviour
     public float durationAnimFall = 1f;
     public Ease ease = Ease.OutBack;
 
-    [SerializeField]private bool _jumping = false;
     private bool _Anim = false;
     private bool _grounded;
+    private float _currentSpeed;
+    private bool _facingRight = false;
 
     private void HandleMoviment()
     {
-        if (!Input.GetButton("Run") && Input.GetButton("Horizontal"))
+
+        if (!Input.GetButton("Run"))
         {
-            playerRigidBody.velocity = new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime * 100, playerRigidBody.velocity.y);
-            if (Input.GetAxis("Horizontal") > 0) playerRigidBody.transform.DOScaleX(1, swapDuration);
-            else if (Input.GetAxis("Horizontal") < 0) playerRigidBody.transform.DOScaleX(-1, swapDuration);
-            animatorPlayer.SetBool(runBool, true);
+            _currentSpeed = speed;
             animatorPlayer.speed = speedWalkAnim;
-        }
-        else if (Input.GetButton("Run") && Input.GetButton("Horizontal"))
-        {
-            playerRigidBody.velocity = new Vector2(Input.GetAxis("Horizontal") * speedRun * Time.deltaTime * 100, playerRigidBody.velocity.y);
-            if (Input.GetAxis("Horizontal") > 0) playerRigidBody.transform.DOScaleX(1, swapDuration);
-            else if (Input.GetAxis("Horizontal") < 0) playerRigidBody.transform.DOScaleX(-1, swapDuration);
-            animatorPlayer.SetBool(runBool, true);
-            animatorPlayer.speed = speedRunAnim;
         }
 
         else
         {
-            animatorPlayer.SetBool(runBool, false);
-            animatorPlayer.speed = speedWalkAnim;
-            playerRigidBody.velocity = new Vector2(0, playerRigidBody.velocity.y);
+            _currentSpeed = speedRun;
+            animatorPlayer.speed = speedRunAnim;
+        }
+
+        float axis = Input.GetAxis("Horizontal");
+        bool walking = Input.GetButton("Horizontal");
+
+        playerRigidBody.velocity = new Vector2(axis * _currentSpeed * Time.deltaTime * 100, playerRigidBody.velocity.y);
+        animatorPlayer.SetBool(runBool, walking);
+
+        if (walking)
+        {
+            if(axis > 0 && !_facingRight)
+            {
+                _facingRight = true;
+                playerRigidBody.transform.DOScaleX(1, swapDuration);
+            }
+
+            else if (axis < 0 && _facingRight)
+            {
+                _facingRight = false;
+                playerRigidBody.transform.DOScaleX(-1, swapDuration);
+            }
         }
 
         if(playerRigidBody.velocity.x < 0)
@@ -77,38 +88,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public float XSign()
+    {
+        return Mathf.Sign(playerRigidBody.transform.localScale.x);
+    }
+
+    private void ResetScale()
+    {
+        playerRigidBody.transform.localScale = new Vector2(1 * XSign(), 1);
+
+        DOTween.Kill(playerRigidBody.transform);
+    }
+
     private void HandleJump()
     {
-        if (_jumping) return;
-
         if (Input.GetButtonDown("Jump") && _grounded)
         {
             playerRigidBody.velocity = Vector2.up * jumpForce;
-            if (playerRigidBody.transform.localScale.x > 0) playerRigidBody.transform.localScale = Vector2.one;
-            else if (playerRigidBody.transform.localScale.x < 0) playerRigidBody.transform.localScale = new Vector2(-1, 1);
-            DOTween.Kill(playerRigidBody.transform);
-            HandleAnimationJump();
+
+            HandleAnimationJump(jumpScaleX,jumpScaleY,durationAnimation);
+
             animatorPlayer.SetBool(jumpBool, true);
-            _jumping = true;
             _grounded = false;
         }
     }
 
-    private void HandleAnimationJump()
+    private void HandleAnimationJump(float xScale, float yScale, float duration)
     {
-        if (playerRigidBody.transform.localScale.x > 0)
-        {
-            playerRigidBody.transform.DOScaleY(jumpScaleY, durationAnimation).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-            playerRigidBody.transform.DOScaleX(jumpScaleX, durationAnimation).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+        ResetScale();
+        playerRigidBody.transform.DOScaleY(yScale, duration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+        playerRigidBody.transform.DOScaleX(xScale * XSign(), duration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
 
-        }
-        else if (playerRigidBody.transform.localScale.x < 0)
-        {
-            playerRigidBody.transform.DOScaleY(jumpScaleY, durationAnimation).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-            playerRigidBody.transform.DOScaleX(-jumpScaleX, durationAnimation).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-
-        }
-        _Anim = false;
+        _Anim = !_Anim;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -119,61 +130,32 @@ public class PlayerController : MonoBehaviour
             _grounded = true;
             if (!_Anim)
             {
-                _Anim = true;
-                _jumping = false;
-                animatorPlayer.SetBool(fallBool, false);
                 animatorPlayer.SetTrigger(landingTrigger);
                 animatorPlayer.SetBool(jumpBool, false);
-                // condicional para animaçao DOTween
-                if (playerRigidBody.transform.localScale.x > 0) playerRigidBody.transform.localScale = Vector2.one;
-                else if (playerRigidBody.transform.localScale.x < 0) playerRigidBody.transform.localScale = new Vector2(-1, 1);
-                DOTween.Kill(playerRigidBody.transform);
-                if (playerRigidBody.transform.localScale.x > 0)
-                {
-                    playerRigidBody.transform.DOScaleX(fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-                    playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-
-                }
-                else if (playerRigidBody.transform.localScale.x < 0)
-                {
-                    playerRigidBody.transform.DOScaleX(-fallScaleX, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-                    playerRigidBody.transform.DOScaleY(fallScaleY, durationAnimFall).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-                }
+                
+                HandleAnimationJump(fallScaleX, fallScaleY, durationAnimFall);
             }
 
-        }
-        else
-        {
-            _jumping = false;
         }
     }
 
     private void Fall()
     {
-        if (animatorPlayer.GetBool(fallBool))
+        animatorPlayer.SetBool(fallBool, playerRigidBody.velocity.y < 0);
+        if (animatorPlayer.GetBool(fallBool) && _grounded)
         {
-            _jumping = true;
-            _Anim = false;
+            _Anim = !_Anim;
         }
     }
 
     private void Init()
     {
-        _Anim = false;
-        _jumping = false;
+        _Anim = true;
+        playerRigidBody = GetComponent<Rigidbody2D>();
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (playerRigidBody.velocity.y < 0)
-        {
-            animatorPlayer.SetBool(fallBool, true);
-            _grounded = false;
-        }
-
-        if (_grounded) return;
-
-        _jumping = true;
         
     }
 
@@ -182,10 +164,6 @@ public class PlayerController : MonoBehaviour
         HandleJump();
         HandleMoviment();
         Fall();
-    }
-    private void OnValidate()
-    {
-        playerRigidBody = GetComponent<Rigidbody2D>();
     }
 
     private void Awake()
