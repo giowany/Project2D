@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
         if (animatorPlayer.GetBool(fallBool) && _grounded)
         {
             _Anim = !_Anim;
+            _grounded = !_grounded;
         }
     }
 
@@ -152,11 +153,6 @@ public class PlayerController : MonoBehaviour
     {
         _Anim = true;
         playerRigidBody = GetComponent<Rigidbody2D>();
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        
     }
 
     void Update()
