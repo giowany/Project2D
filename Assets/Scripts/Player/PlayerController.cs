@@ -41,10 +41,11 @@ public class PlayerController : MonoBehaviour
     private bool _grounded;
     private float _currentSpeed;
     private bool _facingRight = false;
+    private bool _dead = false;
 
     private void HandleMoviment()
     {
-
+        if (_dead) return;
         if (!Input.GetButton("Run"))
         {
             _currentSpeed = speed;
@@ -86,6 +87,12 @@ public class PlayerController : MonoBehaviour
         {
             playerRigidBody.velocity -= friction;
         }
+    }
+
+    public void Dead(bool d)
+    {
+        if (d) _dead = true;
+        if (!d) _dead = false;
     }
 
     public float XSign()
@@ -165,5 +172,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Init();
+        Dead(false);
     }
 }
