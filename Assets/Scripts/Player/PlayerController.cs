@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     private bool _Anim = false;
     private bool _grounded;
     private float _currentSpeed;
-    private bool _facingRight = false;
+    private bool _facingRight = true;
     private bool _dead = false;
 
     private void HandleMoviment()
