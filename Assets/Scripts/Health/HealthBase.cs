@@ -33,7 +33,7 @@ public class HealthBase : MonoBehaviour
             Invoke(nameof(SetDead), .1f);
         }
 
-        else if (_currenteLife >= 5)
+        else if (_currenteLife < startLife)
         {
             flashDamage.Flash();
             _isInvencible = true;
