@@ -39,5 +39,11 @@ public class BulletBase : MonoBehaviour
             enemy.Damage();
             Destroy(gameObject);
         }
+
+        var b = collision.GetComponent<BarrierProtection>();
+        if(b != null)
+        {
+            Destroy(gameObject);
+        }
     }
 }

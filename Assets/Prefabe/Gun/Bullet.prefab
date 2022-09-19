@@ -139,9 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06285d2b267e67540992dc9622dbaaab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foward: {x: 35, y: 0, z: 0}
+  foward: {x: 45, y: 0, z: 0}
   sideRef: 0
-  bulletDamage: 1
   timeToLive: 2
 --- !u!58 &7937871783036002658
 CircleCollider2D:

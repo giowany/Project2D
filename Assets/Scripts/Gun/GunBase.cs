@@ -8,6 +8,7 @@ public class GunBase : MonoBehaviour
     public Transform shootPoint;
     public Transform playerRef;
     public float timeToHate = .5f;
+    public bool _isUsing = false;
 
     private Coroutine _currentCorotine;
 
@@ -31,6 +32,8 @@ public class GunBase : MonoBehaviour
 
     public void Shoot()
     {
+        if(!_isUsing) return;
+
         var projectil = Instantiate(bullet);
         projectil.sideRef = playerRef.localScale.x;
         projectil.transform.position = shootPoint.position;
