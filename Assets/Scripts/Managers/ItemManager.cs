@@ -6,17 +6,17 @@ using EBAC.Core.Singleton;
 
 public class ItemManager : Singleton<ItemManager> 
 {
-    [SerializeField] private int _coins;
     public TextMeshProUGUI textCoins;
+    public SOInt soInt;
     public void AddCoins(int amount = 1)
     {
-        _coins += amount;
-        textCoins.text = "X" + _coins.ToString();
+        soInt.Value += amount;
+        textCoins.text = "X" + soInt.Value.ToString();
     }
 
     private void ResetItens()
     {
-        _coins = 0;
+        soInt.Value = 0;
     }
 
     private void Start()
