@@ -9,33 +9,8 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public Rigidbody2D playerRigidBody;
     public Animator animatorPlayer;
-
-    [Header("Moviment Setup")]
-    public float speed;
-    public float speedRun;
-    public float jumpForce;
-    public Vector2 friction = new Vector2(.1f, 0);
-
-    [Header("Animations Setup")]
-    public string runBool = "Run";
-    public float speedWalkAnim = 1f;
-    public float speedRunAnim = 1.5f;
-    public float swapDuration = .3f;
-    public string jumpBool = "Jump";
-    public string landingTrigger = "Landing";
-    public string fallBool = "Fall";
-
-
-    [Header("DOAnimation Jump Setup")]
-    public float jumpScaleY = 1.5f;
-    public float jumpScaleX = .7f;
-    public float durationAnimation = 1f;
-
-    [Header("DOAnimation fall Setup")]
-    public float fallScaleX = 1.2f;
-    public float fallScaleY = .7f;
-    public float durationAnimFall = 1f;
-    public Ease ease = Ease.OutBack;
+    public SOPlayerConfig playerConfig;
+    public Transform gun;
 
     private bool _Anim = false;
     private bool _grounded;
@@ -48,44 +23,44 @@ public class PlayerController : MonoBehaviour
         if (_dead) return;
         if (!Input.GetButton("Run"))
         {
-            _currentSpeed = speed;
-            animatorPlayer.speed = speedWalkAnim;
+            _currentSpeed = playerConfig.speed;
+            animatorPlayer.speed = playerConfig.speedWalkAnim;
         }
 
         else
         {
-            _currentSpeed = speedRun;
-            animatorPlayer.speed = speedRunAnim;
+            _currentSpeed = playerConfig.speedRun;
+            animatorPlayer.speed = playerConfig.speedRunAnim;
         }
 
         float axis = Input.GetAxis("Horizontal");
         bool walking = Input.GetButton("Horizontal");
 
         playerRigidBody.velocity = new Vector2(axis * _currentSpeed * Time.deltaTime * 100, playerRigidBody.velocity.y);
-        animatorPlayer.SetBool(runBool, walking);
+        animatorPlayer.SetBool(playerConfig.runBool, walking);
 
         if (walking)
         {
             if(axis > 0 && !_facingRight)
             {
                 _facingRight = true;
-                playerRigidBody.transform.DOScaleX(1, swapDuration);
+                playerRigidBody.transform.DOScaleX(1, playerConfig.swapDuration);
             }
 
             else if (axis < 0 && _facingRight)
             {
                 _facingRight = false;
-                playerRigidBody.transform.DOScaleX(-1, swapDuration);
+                playerRigidBody.transform.DOScaleX(-1, playerConfig.swapDuration);
             }
         }
 
         if(playerRigidBody.velocity.x < 0)
         {
-            playerRigidBody.velocity += friction;
+            playerRigidBody.velocity += playerConfig.friction;
         }
         else if (playerRigidBody.velocity.x > 0)
         {
-            playerRigidBody.velocity -= friction;
+            playerRigidBody.velocity -= playerConfig.friction;
         }
     }
 
@@ -111,11 +86,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump") && _grounded)
         {
-            playerRigidBody.velocity = Vector2.up * jumpForce;
+            playerRigidBody.velocity = Vector2.up * playerConfig.jumpForce;
 
-            HandleAnimationJump(jumpScaleX,jumpScaleY,durationAnimation);
+            HandleAnimationJump(playerConfig.jumpScaleX, playerConfig.jumpScaleY, playerConfig.durationAnimation);
 
-            animatorPlayer.SetBool(jumpBool, true);
+            animatorPlayer.SetBool(playerConfig.jumpBool, true);
             _grounded = false;
         }
     }
@@ -123,8 +98,8 @@ public class PlayerController : MonoBehaviour
     private void HandleAnimationJump(float xScale, float yScale, float duration)
     {
         ResetScale();
-        playerRigidBody.transform.DOScaleY(yScale, duration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
-        playerRigidBody.transform.DOScaleX(xScale * XSign(), duration).SetLoops(2, LoopType.Yoyo).SetEase(ease);
+        playerRigidBody.transform.DOScaleY(yScale, duration).SetLoops(2, LoopType.Yoyo).SetEase(playerConfig.ease);
+        playerRigidBody.transform.DOScaleX(xScale * XSign(), duration).SetLoops(2, LoopType.Yoyo).SetEase(playerConfig.ease);
 
         _Anim = !_Anim;
     }
@@ -137,10 +112,10 @@ public class PlayerController : MonoBehaviour
             _grounded = true;
             if (!_Anim)
             {
-                animatorPlayer.SetTrigger(landingTrigger);
-                animatorPlayer.SetBool(jumpBool, false);
+                animatorPlayer.SetTrigger(playerConfig.landingTrigger);
+                animatorPlayer.SetBool(playerConfig.jumpBool, false);
                 
-                HandleAnimationJump(fallScaleX, fallScaleY, durationAnimFall);
+                HandleAnimationJump(playerConfig.fallScaleX, playerConfig.fallScaleY, playerConfig.durationAnimFall);
             }
 
         }
@@ -148,8 +123,8 @@ public class PlayerController : MonoBehaviour
 
     private void Fall()
     {
-        animatorPlayer.SetBool(fallBool, playerRigidBody.velocity.y < 0);
-        if (animatorPlayer.GetBool(fallBool) && _grounded)
+        animatorPlayer.SetBool(playerConfig.fallBool, playerRigidBody.velocity.y < 0);
+        if (animatorPlayer.GetBool(playerConfig.fallBool) && _grounded)
         {
             _Anim = !_Anim;
             _grounded = !_grounded;
