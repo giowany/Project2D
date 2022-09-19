@@ -12,16 +12,13 @@ public class HealthBase : MonoBehaviour
     public float timeToDie = 1f;
     public string healthFloat = "Health";
     public string deadBool = "Dead";
-    public float invensibleTime = 1f;
 
-    private int _currenteLife;
-    private bool _isDead = false;
-    private bool _isInvencible = false;
+    protected int _currenteLife;
+    protected bool _isDead = false;
 
-    public void Damage(int damage)
+    public virtual void Damage(int damage)
     {
         if (_isDead) return;
-        if (_isInvencible) return;
 
         _currenteLife -= damage;
 
@@ -36,15 +33,9 @@ public class HealthBase : MonoBehaviour
         else if (_currenteLife < startLife)
         {
             flashDamage.Flash();
-            _isInvencible = true;
-            Invoke(nameof(InvensibleOff), invensibleTime);
         }
     }
 
-    private void InvensibleOff()
-    {
-        _isInvencible = false;
-    }
 
     private void SetDead()
     {
