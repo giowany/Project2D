@@ -23,6 +23,7 @@ public class FlashDamage : MonoBehaviour
     {
         foreach(var s in renderers)
         {
+            if (s.color.a != 1) return;
             s.DOColor(flashDamage, duration).SetLoops(4, LoopType.Yoyo);
         }
     }

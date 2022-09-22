@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
     public SOPlayerConfig playerConfig;
     public Transform gun;
 
+    [Header("Jump Setings")]
+    public Collider2D pCollider2D;
+    public float bound;
+    public float distanceToGround = .1f;
+
     private bool _Anim = false;
     private bool _grounded;
     private float _currentSpeed;
@@ -52,6 +57,7 @@ public class PlayerController : MonoBehaviour
                 _facingRight = false;
                 playerRigidBody.transform.DOScaleX(-1, playerConfig.swapDuration);
             }
+
         }
 
         if(playerRigidBody.velocity.x < 0)
@@ -84,7 +90,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && _grounded)
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
             playerRigidBody.velocity = Vector2.up * playerConfig.jumpForce;
 
@@ -92,6 +98,7 @@ public class PlayerController : MonoBehaviour
 
             animatorPlayer.SetBool(playerConfig.jumpBool, true);
             _grounded = false;
+
         }
     }
 
@@ -137,6 +144,11 @@ public class PlayerController : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody2D>();
     }
 
+    public bool IsGrounded()
+    {
+        return Physics2D.Raycast(transform.position, -Vector2.up, bound + distanceToGround);
+    }
+
     void Update()
     {
         HandleJump();
@@ -148,5 +160,9 @@ public class PlayerController : MonoBehaviour
     {
         Init();
         Dead(false);
+        if(pCollider2D != null)
+        {
+            bound = pCollider2D.bounds.extents.y;
+        }
     }
 }

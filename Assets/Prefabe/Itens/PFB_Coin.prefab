@@ -62,6 +62,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagPlayer: Player
+  render: {fileID: 7010016826766963569}
+  coin: {fileID: 0}
 --- !u!1 &7010016826766963569
 GameObject:
   m_ObjectHideFlags: 0

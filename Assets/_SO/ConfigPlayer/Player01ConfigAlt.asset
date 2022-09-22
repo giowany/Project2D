@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00adeb463887ed64a8b1e21370aee572, type: 3}
   m_Name: Player01ConfigAlt
   m_EditorClassIdentifier: 
-  speed: 17
-  speedRun: 23
-  jumpForce: 42
+  speed: 20
+  speedRun: 27
+  jumpForce: 47
   friction: {x: 0.3, y: 0}
   runBool: Run
-  speedWalkAnim: 1
-  speedRunAnim: 1.3
+  speedWalkAnim: 1.3
+  speedRunAnim: 1.6
   swapDuration: 0.3
   jumpBool: Jump
   landingTrigger: Landing
