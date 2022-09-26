@@ -14,11 +14,11 @@ public class HealthBase : MonoBehaviour
     public string deadBool = "Dead";
 
     protected int _currenteLife;
-    protected bool _isDead = false;
+    public bool isDead = false;
 
     public virtual void Damage(int damage)
     {
-        if (_isDead) return;
+        if (isDead) return;
 
         _currenteLife -= damage;
 
@@ -44,7 +44,7 @@ public class HealthBase : MonoBehaviour
 
     private void Kill()
     {
-        _isDead = true;
+        isDead = true;
         Destroy(gameObject, timeToDie);
         playeranimator.SetFloat(healthFloat, _currenteLife);
     }

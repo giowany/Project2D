@@ -21,6 +21,7 @@ public class CollectGun : CollectBase
             sprite.gameObject.SetActive(false);
             gun.playerRef = player.transform;
             gun._isUsing = true;
+            gun.GetComponent<Collider2D>().enabled = false;
             transform.parent = player.gun;
             transform.position = player.gun.position;
         }

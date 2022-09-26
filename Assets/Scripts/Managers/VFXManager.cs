@@ -5,7 +5,6 @@ using EBAC.Core.Singleton;
 
 public class VFXManager : Singleton<VFXManager>
 {
-    public ParticleSystem vfxDust;
     public ParticleSystem vfxCoin;
     public ParticleSystem vfxImpact;
 

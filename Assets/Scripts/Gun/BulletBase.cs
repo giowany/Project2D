@@ -7,6 +7,7 @@ public class BulletBase : MonoBehaviour
 {
     public Vector3 foward;
     public float sideRef;
+    public ParticleSystem vfxColision;
 
     public float timeToLive = 2f;
     private int side;
@@ -38,6 +39,12 @@ public class BulletBase : MonoBehaviour
         {
             enemy.Damage();
             Destroy(gameObject);
+
+            if(vfxColision != null)
+            {
+                vfxColision.transform.SetParent(null);
+                vfxColision.Play();
+            }
         }
     }
 }

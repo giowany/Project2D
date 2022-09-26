@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class CollectCoin : CollectBase
 {
-    private ParticleSystem _coin;
+    [SerializeField]private ParticleSystem _coin;
 
-    private void Awake()
+    private void Start()
     {
         _coin = GetComponentInChildren<ParticleSystem>();
     }

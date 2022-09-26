@@ -11,11 +11,13 @@ public class PlayerController : MonoBehaviour
     public Animator animatorPlayer;
     public SOPlayerConfig playerConfig;
     public Transform gun;
+    public ParticleSystem dustVFX;
 
     [Header("Jump Setings")]
     public Collider2D pCollider2D;
     public float bound;
     public float distanceToGround = .1f;
+    public ParticleSystem jumpVFX;
 
     private bool _Anim = false;
     private bool _grounded;
@@ -97,9 +99,16 @@ public class PlayerController : MonoBehaviour
             HandleAnimationJump(playerConfig.jumpScaleX, playerConfig.jumpScaleY, playerConfig.durationAnimation);
 
             animatorPlayer.SetBool(playerConfig.jumpBool, true);
+            dustVFX.Stop();
+            JumpVFX();
             _grounded = false;
 
         }
+    }
+
+    private void JumpVFX()
+    {
+        jumpVFX.Play();
     }
 
     private void HandleAnimationJump(float xScale, float yScale, float duration)
@@ -125,6 +134,7 @@ public class PlayerController : MonoBehaviour
                 HandleAnimationJump(playerConfig.fallScaleX, playerConfig.fallScaleY, playerConfig.durationAnimFall);
             }
 
+            dustVFX.Play();
         }
     }
 

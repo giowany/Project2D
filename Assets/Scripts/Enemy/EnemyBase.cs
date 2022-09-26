@@ -17,6 +17,8 @@ public class EnemyBase : MonoBehaviour
 
         if (healthPlayer != null && playerController != null)
         {
+            if(health.isDead) return;
+
             healthPlayer.Damage(damage);
             Attack();
         }
