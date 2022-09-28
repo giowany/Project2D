@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4694375629327504767}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 9167898896136708529}
   m_RootOrder: 0
@@ -50,7 +50,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c59699cdfaf47d84c8773768fb922137, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 9167898896136708529}
   - component: {fileID: 4335510824822805181}
   - component: {fileID: 9046431152692977235}
-  - component: {fileID: 7937871783036002658}
+  - component: {fileID: 9094599268952654698}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -144,8 +144,8 @@ MonoBehaviour:
   sideRef: 0
   vfxColision: {fileID: 6095274550985176669}
   timeToLive: 2
---- !u!58 &7937871783036002658
-CircleCollider2D:
+--- !u!70 &9094599268952654698
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -157,9 +157,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.68
+  m_Offset: {x: -0.043628693, y: 0}
+  m_Size: {x: 2.9, y: 0.9}
+  m_Direction: 1
 --- !u!1001 &512806258591905203
 PrefabInstance:
   m_ObjectHideFlags: 0
