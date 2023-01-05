@@ -6,6 +6,7 @@ public class CollectGun : CollectBase
 {
     public SpriteRenderer sprite;
     public GunBase gun;
+    public GunAudioBase gunAudio;
 
 
     protected override void Collect()
@@ -24,6 +25,7 @@ public class CollectGun : CollectBase
             gun.GetComponent<Collider2D>().enabled = false;
             transform.parent = player.gun;
             transform.position = player.gun.position;
+            gunAudio.PlayAudioReload();
         }
     }
 

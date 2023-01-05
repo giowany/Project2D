@@ -5,6 +5,7 @@ using UnityEngine;
 public class CollectCoin : CollectBase
 {
     [SerializeField]private ParticleSystem _coin;
+    public AudioSource coinAudioSource;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class CollectCoin : CollectBase
         base.OnCollect();
         ItemManager.instance.AddCoins();
         _coin.Play();
+        coinAudioSource.Play();
         Invoke("DisableItem", _coin.main.duration);
     }
 

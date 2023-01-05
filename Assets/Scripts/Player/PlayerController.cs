@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public SOPlayerConfig playerConfig;
     public Transform gun;
     public ParticleSystem dustVFX;
+    public AudioJumpLand audioJL;
 
     [Header("Jump Setings")]
     public Collider2D pCollider2D;
@@ -24,10 +25,12 @@ public class PlayerController : MonoBehaviour
     private float _currentSpeed;
     private bool _facingRight = true;
     private bool _dead = false;
+    private bool _isCollision = false;
 
     private void HandleMoviment()
     {
         if (_dead) return;
+        if(!IsGrounded() && _isCollision) return;
         if (!Input.GetButton("Run"))
         {
             _currentSpeed = playerConfig.speed;
@@ -100,8 +103,10 @@ public class PlayerController : MonoBehaviour
 
             animatorPlayer.SetBool(playerConfig.jumpBool, true);
             dustVFX.Stop();
+            audioJL.JumpAudio();
             JumpVFX();
             _grounded = false;
+            _isCollision = false;
 
         }
     }
@@ -122,6 +127,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        _isCollision = true;
         var c = collision.GetContact(0).normal;
         if (c == new Vector2(0, 1))
         {
@@ -135,6 +141,7 @@ public class PlayerController : MonoBehaviour
             }
 
             dustVFX.Play();
+            audioJL.LandAudio();
         }
     }
 

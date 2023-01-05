@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06285d2b267e67540992dc9622dbaaab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foward: {x: 45, y: 0, z: 0}
+  foward: {x: 50, y: 0, z: 0}
   sideRef: 0
   vfxColision: {fileID: 6095274550985176669}
   timeToLive: 2

@@ -19,6 +19,11 @@ public class GunBase : MonoBehaviour
     void Update()
     {
         ShootGun();
+        if (Input.GetKeyDown("k")) Reload();
+        if (_currentBulletNumbers >= bulletLimite)
+        {
+            Reload();
+        }
     }
 
     private void Awake()
@@ -39,20 +44,28 @@ public class GunBase : MonoBehaviour
         }
     }
 
+    void Reload()
+    {
+        if (!isUsing) return;
+        _currentBulletNumbers = 0;
+        UsingGun();
+        gunAudio.PlayAudioReload();
+        Invoke("UsingGun", reloadTime);
+    }
+
     public void Shoot()
     {
         if(!isUsing) return;
-        if (_currentBulletNumbers >= bulletLimite)
-        {
-            _currentBulletNumbers = 0;
-            return;
-        }
-        
         if(gunAudio != null) gunAudio.PlayAudio();
         var projectil = Instantiate(bullet);
         projectil.sideRef = playerRef.localScale.x;
         projectil.transform.position = shootPoint.position;
         _currentBulletNumbers++;
+    }
+
+    private void UsingGun()
+    {
+        isUsing = !isUsing;
     }
 
     IEnumerator FireHate()
@@ -61,10 +74,7 @@ public class GunBase : MonoBehaviour
         while (true)
         {
             Shoot();
-            if(_currentBulletNumbers < bulletLimite)
-                yield return new WaitForSeconds(timeToHate);
-            else if(_currentBulletNumbers >= bulletLimite)
-                yield return new WaitForSeconds(reloadTime);
+            yield return new WaitForSeconds(timeToHate);
         }
     }
 }
